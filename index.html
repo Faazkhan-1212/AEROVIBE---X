@@ -176,8 +176,16 @@ body{background:#060b12;color:#edf4fc}.nav{background:rgba(5,10,17,.88);border-b
 @keyframes titleOrbit{to{rotate:360deg}}@keyframes titleShine{to{left:66%}}@keyframes titleBeam{from{opacity:.18;transform:translateX(-30px) rotate(22deg)}to{opacity:.7;transform:translateX(30px) rotate(22deg)}}
 @media(max-width:650px){.aero-title-card{min-height:380px;padding:42px 14px}.aero-grand-title{letter-spacing:-.025em}.aero-title-kicker{letter-spacing:.28em}.aero-title-tagline{letter-spacing:.3em}.aero-title-orbit{width:90%;height:30%}.aero-title-orbit.orbit-b{width:100%;height:44%}}
 @media(prefers-reduced-motion:reduce){.aero-title-card:after,.aero-title-orbit,.aero-title-beam,.aero-title-rule i{animation:none}}
+</style><style>
+/* Scroll-reactive circuit board: a canvas stays behind the page content. */
+.circuit-board-layer{position:fixed;inset:-5% -5%;z-index:0;width:110%;height:110%;pointer-events:none;opacity:.82;mix-blend-mode:screen;transform:translate3d(var(--pointer-x,0px),var(--pointer-y,0px),0) perspective(1050px) rotateX(5deg) scale(1.04);transform-origin:center center;will-change:transform}
+html.circuit-enhanced .section:not(.hero){background:linear-gradient(180deg,rgba(8,15,25,.66),rgba(6,11,18,.62))}
+html.circuit-enhanced .section:not(.aero-cinematic)::before{opacity:0}
+@media(max-width:700px){.circuit-board-layer{opacity:.58;transform:translate3d(var(--pointer-x,0px),var(--pointer-y,0px),0) perspective(900px) rotateX(3deg) scale(1.03)}}
+@media(prefers-reduced-motion:reduce){.circuit-board-layer{transform:none;will-change:auto}}
 </style></head>
 <body><div class="scroll-meter" id="scroll-meter" aria-hidden="true"><span></span></div><div class="custom-cursor" id="custom-cursor" aria-hidden="true"><span class="cursor-ring"></span><span class="cursor-core"></span><span class="cursor-word">SCROLL</span></div><div class="announcement-bar"><span class="announcement-pulse"></span><span>STUDENT RESEARCH</span><i aria-hidden="true">/</i><span>ACOUSTIC + MECHANICAL VIBRATION</span><a href="#experiments">Explore the prototype <b aria-hidden="true">↗</b></a></div>
+<canvas class="circuit-board-layer" id="circuit-board-layer" aria-hidden="true"></canvas>
 <canvas class="particle-layer" id="particles" aria-hidden="true"></canvas>
 <header class="nav"><div class="wrap navin"><a class="brand" href="#home" aria-label="AEROVIBE - X home">AERO<span>VIBE</span> - X</a><nav class="links" id="navlinks"><a href="#home">Home</a><a href="#about">About</a><a href="#buildlog">Build Log</a><a href="#how">How It Works</a><a href="#technology">Technology</a><a href="#applications">Applications</a><a href="#experiments">Experiments</a><a href="#visualization">Energy Vision</a><a href="#future">Future Scope</a><a href="#contact">Contact</a><a class="btn" href="#technology">Explore the Technology</a></nav><button class="menu" aria-label="Open navigation" aria-expanded="false" id="menubtn">☰</button></div></header>
 <main>
@@ -231,7 +239,91 @@ const details={cover:{title:'Top cover + solar panel',kicker:'Outer layer',copy:
 const stage=document.getElementById('prototype-stage'),parts=[...document.querySelectorAll('.component')],title=document.getElementById('part-title'),copy=document.getElementById('part-copy'),kicker=document.getElementById('part-kicker'),status=document.getElementById('part-status');function selectPart(part){const info=details[part.dataset.part];if(!info)return;parts.forEach(item=>item.classList.toggle('selected',item===part));title.textContent=info.title;kicker.textContent=info.kicker;copy.textContent=info.copy;status.textContent=info.status}parts.forEach(part=>{part.addEventListener('click',()=>selectPart(part));part.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();selectPart(part)}})});const toggle=document.getElementById('explode-toggle'),diagram=document.getElementById('cutaway');toggle.addEventListener('click',()=>{const expanded=stage.classList.toggle('exploded');toggle.setAttribute('aria-pressed',String(expanded));toggle.textContent=expanded?'Assembled view':'Exploded view';diagram.src=expanded?'aerovibe-x-cross-section-exploded.png':'aerovibe-x-cross-section-assembled.png';diagram.alt=expanded?'AEROVIBE-X exploded internal structure with labeled component layers.':'AEROVIBE-X assembled energy-harvesting device side view.';parts.forEach(part=>part.classList.remove('selected'));title.textContent='Choose a highlighted part';copy.textContent='Click or keyboard-select a highlighted component. Its purpose and role in the pictured system will appear here.';kicker.textContent='Component guide';status.textContent='Poster concept · not a verified bill of materials'});
 
 const aeroField=document.getElementById('aero-particles');if(aeroField&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){let aeroSeed=48271;const aeroRandom=()=>{aeroSeed=aeroSeed*16807%2147483647;return(aeroSeed-1)/2147483646};for(let i=0;i<(window.innerWidth<700?340:780);i++){const angle=aeroRandom()*Math.PI*2,radius=.35+aeroRandom()*.62,x=Math.max(1,Math.min(99,50+Math.cos(angle)*radius*70)),y=Math.max(2,Math.min(98,52+Math.sin(angle)*radius*43)),spark=document.createElement('i');spark.className='aero-particle'+(i%11===0?' cyan':'');spark.style.setProperty('--px',x.toFixed(2)+'%');spark.style.setProperty('--py',y.toFixed(2)+'%');spark.style.setProperty('--dx','calc((50 - '+x.toFixed(2)+') * 1cqw)');spark.style.setProperty('--dy','calc((52 - '+y.toFixed(2)+') * 1cqh)');spark.style.setProperty('--size',(1+aeroRandom()*2.1).toFixed(1)+'px');spark.style.setProperty('--angle',(Math.atan2(52-y,50-x)*180/Math.PI).toFixed(1)+'deg');spark.style.setProperty('--duration',(5+aeroRandom()*6).toFixed(2)+'s');spark.style.setProperty('--delay',(-aeroRandom()*10).toFixed(2)+'s');aeroField.appendChild(spark)}}
-const buildSection=document.getElementById('buildlog');if(buildSection){const buildParts=[...buildSection.querySelectorAll('.pcb-part')],buildCount=document.getElementById('parts-count'),buildState=document.getElementById('build-state'),buildTraces=buildSection.querySelector('.pcb-traces'),resetBuild=document.getElementById('reset-build');const buildOrigins=buildParts.map(part=>{const match=part.getAttribute("transform").match(/translate\(([-0-9.]+)\s+([-0-9.]+)\)/);return match?[Number(match[1]),Number(match[2])]:[0,0]});let buildTick=false;function updateBuild(){const total=Math.max(1,buildSection.offsetHeight-window.innerHeight),rect=buildSection.getBoundingClientRect(),progress=Math.max(0,Math.min(1,-rect.top/total)),identified=Math.min(14,Math.floor(progress*14+.001));buildCount.textContent=String(identified).padStart(2,'0');buildState.textContent=identified===0?'BARE BOARD':identified===14?'SYSTEM ASSEMBLED':`PART ${String(identified).padStart(2,'0')} · ${buildParts[identified-1]?.dataset.name.toUpperCase()||'ASSEMBLING'}`;buildParts.forEach((part,index)=>{const local=Math.max(0,Math.min(1,(progress-index/14)*14));part.style.opacity=String(local);part.setAttribute('transform',`translate(${buildOrigins[index][0]} ${buildOrigins[index][1]+(1-local)*parseFloat(getComputedStyle(part).getPropertyValue('--lift'))})`)});buildTraces.style.strokeDashoffset=String(580*(1-progress));buildTraces.style.opacity=String(.2+.8*progress);buildTick=false}function requestBuild(){if(!buildTick){requestAnimationFrame(updateBuild);buildTick=true}}window.addEventListener('scroll',requestBuild,{passive:true});window.addEventListener('resize',requestBuild);requestBuild();resetBuild.addEventListener('click',()=>{const y=window.scrollY+buildSection.getBoundingClientRect().top-105;window.scrollTo({top:y,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})})}const scrollMeter=document.querySelector('#scroll-meter span');function updateScrollMeter(){const range=document.documentElement.scrollHeight-window.innerHeight;scrollMeter.style.width=(range>0?Math.min(100,window.scrollY/range*100):0)+'%'}window.addEventListener('scroll',updateScrollMeter,{passive:true});window.addEventListener('resize',updateScrollMeter);updateScrollMeter();const customCursor=document.getElementById('custom-cursor');if(customCursor&&window.matchMedia('(pointer:fine)').matches&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('has-custom-cursor');document.addEventListener('pointermove',event=>{customCursor.style.setProperty('--cx',event.clientX+'px');customCursor.style.setProperty('--cy',event.clientY+'px');customCursor.classList.add('visible')},{passive:true});document.addEventListener('pointerleave',()=>customCursor.classList.remove('visible'));document.addEventListener('pointerover',event=>{const target=event.target.closest('a,button,summary,[role="button"]');customCursor.classList.toggle('hover',Boolean(target));customCursor.classList.toggle('on-board',Boolean(event.target.closest('#buildlog')));customCursor.querySelector('.cursor-word').textContent=event.target.closest('#buildlog')?'BUILD':'OPEN'});document.addEventListener('pointerout',event=>{if(!event.relatedTarget){customCursor.classList.remove('visible','hover','on-board')}})}function moveCircuitBackdrop(){document.documentElement.style.setProperty('--circuit-shift',`${-((window.scrollY*.18)%700)}px`)}window.addEventListener('scroll',moveCircuitBackdrop,{passive:true});window.addEventListener('resize',moveCircuitBackdrop);moveCircuitBackdrop();</script></body></html>
+const buildSection=document.getElementById('buildlog');if(buildSection){const buildParts=[...buildSection.querySelectorAll('.pcb-part')],buildCount=document.getElementById('parts-count'),buildState=document.getElementById('build-state'),buildTraces=buildSection.querySelector('.pcb-traces'),resetBuild=document.getElementById('reset-build');const buildOrigins=buildParts.map(part=>{const match=part.getAttribute("transform").match(/translate\(([-0-9.]+)\s+([-0-9.]+)\)/);return match?[Number(match[1]),Number(match[2])]:[0,0]});let buildTick=false;function updateBuild(){const total=Math.max(1,buildSection.offsetHeight-window.innerHeight),rect=buildSection.getBoundingClientRect(),progress=Math.max(0,Math.min(1,-rect.top/total)),identified=Math.min(14,Math.floor(progress*14+.001));buildCount.textContent=String(identified).padStart(2,'0');buildState.textContent=identified===0?'BARE BOARD':identified===14?'SYSTEM ASSEMBLED':`PART ${String(identified).padStart(2,'0')} · ${buildParts[identified-1]?.dataset.name.toUpperCase()||'ASSEMBLING'}`;buildParts.forEach((part,index)=>{const local=Math.max(0,Math.min(1,(progress-index/14)*14));part.style.opacity=String(local);part.setAttribute('transform',`translate(${buildOrigins[index][0]} ${buildOrigins[index][1]+(1-local)*parseFloat(getComputedStyle(part).getPropertyValue('--lift'))})`)});buildTraces.style.strokeDashoffset=String(580*(1-progress));buildTraces.style.opacity=String(.2+.8*progress);buildTick=false}function requestBuild(){if(!buildTick){requestAnimationFrame(updateBuild);buildTick=true}}window.addEventListener('scroll',requestBuild,{passive:true});window.addEventListener('resize',requestBuild);requestBuild();resetBuild.addEventListener('click',()=>{const y=window.scrollY+buildSection.getBoundingClientRect().top-105;window.scrollTo({top:y,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})})}const scrollMeter=document.querySelector('#scroll-meter span');function updateScrollMeter(){const range=document.documentElement.scrollHeight-window.innerHeight;scrollMeter.style.width=(range>0?Math.min(100,window.scrollY/range*100):0)+'%'}window.addEventListener('scroll',updateScrollMeter,{passive:true});window.addEventListener('resize',updateScrollMeter);updateScrollMeter();const customCursor=document.getElementById('custom-cursor');if(customCursor&&window.matchMedia('(pointer:fine)').matches&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('has-custom-cursor');document.addEventListener('pointermove',event=>{customCursor.style.setProperty('--cx',event.clientX+'px');customCursor.style.setProperty('--cy',event.clientY+'px');customCursor.classList.add('visible')},{passive:true});document.addEventListener('pointerleave',()=>customCursor.classList.remove('visible'));document.addEventListener('pointerover',event=>{const target=event.target.closest('a,button,summary,[role="button"]');customCursor.classList.toggle('hover',Boolean(target));customCursor.classList.toggle('on-board',Boolean(event.target.closest('#buildlog')));customCursor.querySelector('.cursor-word').textContent=event.target.closest('#buildlog')?'BUILD':'OPEN'});document.addEventListener('pointerout',event=>{if(!event.relatedTarget){customCursor.classList.remove('visible','hover','on-board')}})}function moveCircuitBackdrop(){document.documentElement.style.setProperty('--circuit-shift',`${-((window.scrollY*.18)%700)}px`)}window.addEventListener('scroll',moveCircuitBackdrop,{passive:true});window.addEventListener('resize',moveCircuitBackdrop);moveCircuitBackdrop();</script><script>
+/* Draw a lightweight, tiled circuit board and move its depth layers with page scroll. */
+(()=>{
+  const board=document.getElementById('circuit-board-layer');
+  const ctx=board&&board.getContext('2d',{alpha:true});
+  if(!ctx)return;
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+  const compact=window.matchMedia('(max-width: 700px)');
+  let width=0,height=0,dpr=1,scroll=window.scrollY,frame=0;
+  const tileH=760;
+  // A seeded generator keeps every board tile stable between scroll frames.
+  function randomFor(seed){let state=(seed>>>0)||1;return ()=>{state=(state*1664525+1013904223)>>>0;return state/4294967296}}
+  function resize(){
+    dpr=Math.min(window.devicePixelRatio||1,compact.matches?1.25:1.6);
+    width=window.innerWidth;height=window.innerHeight;
+    board.width=Math.round(width*dpr);board.height=Math.round(height*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);draw();
+  }
+  function drawTile(y,seed,detail){
+    const rand=randomFor(seed),step=Math.max(24,Math.round(width/34));
+    // Fine etched copper grid and solder pads.
+    ctx.lineWidth=.65;ctx.strokeStyle='#48baff44';
+    for(let x=0;x<width+step;x+=step){ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+tileH);ctx.stroke()}
+    for(let row=0;row<=tileH;row+=step){ctx.beginPath();ctx.moveTo(0,y+row);ctx.lineTo(width,y+row);ctx.stroke()}
+    // Orthogonal, branching traces with a soft blue glow and bright core.
+    const routes=detail?23:12;
+    for(let n=0;n<routes;n++){
+      const x0=Math.floor(rand()*width/step)*step, y0=y+Math.floor(rand()*tileH/step)*step;
+      const x1=Math.max(0,Math.min(width,Math.floor(rand()*width/step)*step));
+      const y1=y+Math.floor(rand()*tileH/step)*step, elbow=Math.max(0,Math.min(width,Math.floor(rand()*width/step)*step));
+      ctx.beginPath();ctx.moveTo(x0,y0);ctx.lineTo(elbow,y0);ctx.lineTo(elbow,y1);ctx.lineTo(x1,y1);
+      ctx.lineWidth=detail?2.6:1.8;ctx.strokeStyle=n%7===0?'#ffd27dcc':'#52caffd8';
+      ctx.shadowColor=n%7===0?'#ffc96c':'#22aaff';ctx.shadowBlur=detail?12:7;ctx.stroke();ctx.shadowBlur=0;
+      for(const [px,py] of [[x0,y0],[x1,y1]]){ctx.beginPath();ctx.arc(px,py,detail?3.2:2.1,0,Math.PI*2);ctx.fillStyle=n%7===0?'#ffd489':'#8be9ff';ctx.fill()}
+    }
+    // SMD chips: dark packages, bright edge, and tiny pins around each body.
+    const chips=detail?7:4;
+    for(let i=0;i<chips;i++){
+      const x=24+rand()*Math.max(1,width-100),cy=y+35+rand()*(tileH-100),w=38+rand()*42,h=25+rand()*22;
+      ctx.shadowColor='#168bff';ctx.shadowBlur=10;ctx.fillStyle='#071a2c';ctx.strokeStyle='#5fd6ff';ctx.lineWidth=1.25;ctx.fillRect(x,cy,w,h);ctx.strokeRect(x,cy,w,h);ctx.shadowBlur=0;
+      ctx.fillStyle='#153e5d';ctx.fillRect(x+4,cy+4,w-8,h-8);
+      ctx.strokeStyle='#8ddfffaa';ctx.lineWidth=1;
+      for(let pin=0;pin<4;pin++){const px=x+7+pin*(w-14)/3;ctx.beginPath();ctx.moveTo(px,cy-5);ctx.lineTo(px,cy+2);ctx.moveTo(px,cy+h-2);ctx.lineTo(px,cy+h+5);ctx.stroke()}
+      for(let pin=0;pin<3;pin++){const py=cy+7+pin*(h-14)/2;ctx.beginPath();ctx.moveTo(x-5,py);ctx.lineTo(x+2,py);ctx.moveTo(x+w-2,py);ctx.lineTo(x+w+5,py);ctx.stroke()}
+      ctx.fillStyle='#9beaff';ctx.fillRect(x+w*.42,cy+h*.4,Math.max(4,w*.16),Math.max(3,h*.2));
+    }
+    // Resistors with warm ceramic bodies and metallic leads.
+    const resistors=detail?18:9;
+    for(let i=0;i<resistors;i++){
+      const x=rand()*Math.max(1,width-64),cy=y+rand()*(tileH-18),w=18+rand()*15;
+      ctx.strokeStyle='#b4dfffaa';ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(x-9,cy+4);ctx.lineTo(x,cy+4);ctx.moveTo(x+w,cy+4);ctx.lineTo(x+w+9,cy+4);ctx.stroke();
+      ctx.fillStyle='#c8874b';ctx.strokeStyle='#ffd492';ctx.lineWidth=.8;ctx.fillRect(x,cy,w,8);ctx.strokeRect(x,cy,w,8);
+      ctx.fillStyle='#24588a';ctx.fillRect(x+w*.35,cy,3,8);ctx.fillStyle='#442f6f';ctx.fillRect(x+w*.66,cy,2,8);
+    }
+    // Capacitors and glowing status diodes scattered across the board.
+    const passives=detail?16:8;
+    for(let i=0;i<passives;i++){
+      const x=rand()*Math.max(1,width-32),cy=y+rand()*(tileH-40),r=3+rand()*5;
+      ctx.fillStyle='#102a40';ctx.strokeStyle='#80ddff';ctx.lineWidth=1;ctx.fillRect(x,cy,9,16);ctx.strokeRect(x,cy,9,16);
+      ctx.fillStyle='#c1f3ff';ctx.fillRect(x+2,cy+2,5,2);
+      ctx.beginPath();ctx.arc(x+18,cy+7,r,0,Math.PI*2);ctx.fillStyle=i%4===0?'#ffc96c':'#6ce6ff';ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=detail?11:6;ctx.fill();ctx.shadowBlur=0;
+    }
+  }
+  function draw(){
+    if(!width||!height)return;
+    ctx.clearRect(0,0,width,height);
+    const detail=!compact.matches, layers=detail?[[.13,.29,.84],[.23,.38,1],[.34,.27,1.13]]:[[.15,.34,.88],[.29,.40,1.06]];
+    layers.forEach(([speed,alpha,scale],layer)=>{
+      ctx.save();ctx.globalAlpha=alpha;
+      // Slight shear and scale make the parallel traces read as a deep board plane.
+      ctx.translate(width/2,0);ctx.scale(scale,scale);ctx.translate(-width/2,0);
+      ctx.transform(1,0,-.075,1,width*.04,0);
+      const shift=(scroll*speed)%tileH,first=-tileH-shift;
+      for(let y=first,index=-1;y<height+tileH;y+=tileH,index++)drawTile(y,Math.floor((scroll*speed+index*tileH)/tileH)*97+layer*7919,detail);
+      ctx.restore();
+    });
+  }
+  function schedule(){if(frame)return;frame=requestAnimationFrame(()=>{frame=0;draw()})}
+  // Passive listeners avoid blocking scrolling; redraw only when the view changes.
+  window.addEventListener('scroll',()=>{scroll=window.scrollY;schedule()},{passive:true});
+  window.addEventListener('resize',resize,{passive:true});compact.addEventListener?.('change',resize);reduced.addEventListener?.('change',resize);
+  if(!reduced.matches&&!compact.matches){window.addEventListener('pointermove',event=>{board.style.setProperty('--pointer-x',((event.clientX/width-.5)*5).toFixed(2)+'px');board.style.setProperty('--pointer-y',((event.clientY/height-.5)*4).toFixed(2)+'px')},{passive:true})}
+  document.documentElement.classList.add('circuit-enhanced');resize();
+})();
+</script></body></html>
 
 
 
