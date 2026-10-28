@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#101d39"/>
+      <stop offset=".25" stop-color="#263e5b"/>
+      <stop offset=".49" stop-color="#637f91"/>
+      <stop offset=".7" stop-color="#d5aa79"/>
+      <stop offset=".86" stop-color="#77606b"/>
+      <stop offset="1" stop-color="#172238"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="76%" cy="26%" r="47%">
+      <stop offset="0" stop-color="#fff5d9" stop-opacity=".98"/>
+      <stop offset=".12" stop-color="#ffe3ab" stop-opacity=".7"/>
+      <stop offset=".44" stop-color="#f8bd77" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#f8bd77" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cloudTop" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#fff5e5" stop-opacity=".82"/>
+      <stop offset=".22" stop-color="#f3d9bc" stop-opacity=".62"/>
+      <stop offset=".62" stop-color="#a9b4c0" stop-opacity=".23"/>
+      <stop offset="1" stop-color="#65748a" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="cloudGold" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#fff6df" stop-opacity=".9"/>
+      <stop offset=".24" stop-color="#ffe0ad" stop-opacity=".7"/>
+      <stop offset=".78" stop-color="#d89b74" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#d89b74" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-40%" width="140%" height="180%">
+      <feGaussianBlur stdDeviation="28"/>
+    </filter>
+    <filter id="haze" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="70"/>
+    </filter>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".72" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix values=".35 0 0 0 .15 .35 0 0 0 .15 .35 0 0 0 .15 0 0 0 .12 0"/>
+    </filter>
+    <linearGradient id="ray" x1="1" y1="0" x2="0" y2="1">
+      <stop stop-color="#fff2cb" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#ffe7bd" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="wave" x1="0" y1="0" x2="1" y2=".4">
+      <stop stop-color="#ffe0a1" stop-opacity="0"/>
+      <stop offset=".28" stop-color="#fff0c4" stop-opacity=".32"/>
+      <stop offset=".58" stop-color="#a5e6ff" stop-opacity=".18"/>
+      <stop offset=".83" stop-color="#ffe2a0" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#ffe0a1" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+  <rect width="1920" height="1080" fill="url(#sun)"/>
+  <ellipse cx="1450" cy="730" rx="860" ry="250" fill="#ffd19a" opacity=".2" filter="url(#haze)"/>
+  <g opacity=".78">
+    <path d="M1530 110 L800 870 L1100 870 Z" fill="url(#ray)" opacity=".34"/>
+    <path d="M1530 110 L1110 900 L1240 900 Z" fill="url(#ray)" opacity=".22"/>
+    <path d="M1530 110 L400 820 L590 820 Z" fill="url(#ray)" opacity=".18"/>
+    <path d="M1530 110 L1320 820 L1390 820 Z" fill="url(#ray)" opacity=".3"/>
+  </g>
+  <g filter="url(#soft)" opacity=".72">
+    <path d="M-100 420 C20 360 55 286 150 310 C220 204 340 224 394 302 C470 226 567 244 604 327 C710 276 790 315 813 388 C720 448 652 462 536 447 C366 487 177 464 -100 500Z" fill="url(#cloudTop)"/>
+    <path d="M1100 410 C1187 346 1241 276 1328 298 C1400 194 1512 207 1572 280 C1644 204 1740 226 1788 302 C1880 268 1958 306 2020 362 L2020 486 C1850 466 1690 478 1538 445 C1388 484 1240 464 1100 494Z" fill="url(#cloudTop)"/>
+    <path d="M-80 820 C67 758 151 704 242 730 C324 654 428 678 479 746 C557 687 653 704 693 778 C817 735 887 780 912 843 C747 895 576 916 399 890 C222 926 70 900 -80 948Z" fill="url(#cloudGold)"/>
+    <path d="M1050 820 C1158 744 1235 716 1320 742 C1399 660 1508 686 1556 756 C1636 700 1734 723 1778 792 C1872 754 1957 791 2028 850 L2028 1000 C1820 931 1652 951 1498 907 C1334 948 1184 922 1050 966Z" fill="url(#cloudGold)"/>
+  </g>
+  <g opacity=".24" filter="url(#soft)">
+    <path d="M0 560 C190 492 342 520 468 556 C619 501 748 526 858 574 C703 624 548 641 379 615 C244 650 117 638 0 670Z" fill="#fff0dc"/>
+    <path d="M1008 610 C1174 532 1324 551 1440 591 C1584 537 1734 566 1920 626 L1920 736 C1714 681 1562 698 1402 672 C1262 711 1128 689 1008 732Z" fill="#fff2dc"/>
+  </g>
+  <g fill="none" stroke="url(#wave)" stroke-width="2">
+    <ellipse cx="960" cy="558" rx="765" ry="258" transform="rotate(-8 960 558)" opacity=".5"/>
+    <ellipse cx="960" cy="558" rx="872" ry="333" transform="rotate(11 960 558)" opacity=".42" stroke-dasharray="18 30"/>
+    <ellipse cx="960" cy="558" rx="650" ry="202" transform="rotate(-18 960 558)" opacity=".38" stroke-dasharray="3 18"/>
+  </g>
+  <rect width="1920" height="1080" filter="url(#grain)" opacity=".11"/>
+  <rect width="1920" height="1080" fill="none" stroke="#fff5df" stroke-opacity=".18" stroke-width="2"/>
+</svg>
